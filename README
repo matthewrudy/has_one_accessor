@@ -1,0 +1,45 @@
+has_one_accessor
+==========
+
+A simple plugin to allow you to use an ActiveRecord HasOne Association's attributes like those of your own model.
+It will give you nice setter and getter methods that will dynamically build the association, set it, and save it only on save of the underlying record.
+This is useful for taking input from forms;
+  User.new(params[:user]) is much nicer than
+  
+  auth_params = params[:user].delete(:auth)
+  user = User.new(params[:user])
+  user.authentication || user.build_authentication
+  user.authentication.openid_url = auth_params[:openid_url]
+  ...blah blah blah...
+
+Simplicity and peace of mind is but a `has_one_accessor` away
+
+Example
+=======
+
+  class User
+    has_one :authentication
+    has_one_accessor :authentication, [:openid_url, :facebook_token], :allow_blank => false
+  end
+
+this gives us
+
+  user.authentication_openid_url
+  user.authentication_openid_url=
+  user.authentication_facebook_token
+  user.authentication_facebook_token=
+
+and with :allow_blank => false, it'll remove records with blank values on save.
+
+also, if you prefer to generate methods without a :prefix
+
+  has_one_accessor :authentication, :google_id, :prefix => false
+
+will give us
+
+  user.google_id
+  user.google_id=
+
+with all of the same niceties
+
+Copyright (c) 2008 [Matthew Rudy Jacobs], released under the MIT license
