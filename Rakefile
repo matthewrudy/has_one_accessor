@@ -1,15 +1,15 @@
 require 'rake'
-require 'rake/testtask'
+require 'spec'
+require 'spec/rake/spectask'
 require 'rake/rdoctask'
 
-desc 'Default: run unit tests.'
-task :default => :test
+desc 'Default: run the specs.'
+task :default => :spec
 
-desc 'Test the has_one_accessor plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
+desc 'Run specs for rude_q plugin'
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_opts = ['--options', "\"spec/spec.opts\""]
+  t.spec_files = FileList['spec/**/*_spec.rb']
 end
 
 desc 'Generate documentation for the HasOneAccessor plugin.'
